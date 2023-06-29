@@ -25,7 +25,7 @@
  
 ## Installation 
  
- [![Install PowerDeleteSuite](https://i.imgur.com/c0s8Mm2.png)](https://codepen.io/j0be/full/WMBWOW/)
+ [Paste the contents of `bookmarklet.js` as bookmarklet](https://www.freecodecamp.org/news/what-are-bookmarklets/) or install `powerdeletesuite.user.js` as a userscript. Sorry, no drag-and-drop bookmarklet here.
  
 ## Bugs / Issues?
  
