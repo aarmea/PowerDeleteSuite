@@ -271,6 +271,13 @@ var pd = {
       }}
       return check.subs && check.gold && check.saved && check.mod && check.score && check.date;
     },
+    getOrCreatePermalink: function(item) {
+      if (item.data.permalink) {
+        return 'https://reddit.com'+item.data.permalink;
+      } else {
+        return 'https://reddit.com/r/'+item.data.subreddit+'/comments/'+(item.data.link_id.replace(/^t\d_/,''))+'/x/'+item.data.id+'?context=3';
+      }
+    },
     strToBase64: function(str) {
       var encoder = new TextEncoder();
       const bytes = encoder.encode(str);
@@ -459,10 +466,7 @@ var pd = {
           str = '';
           str += pd.helpers.csvCell(pd.helpers.csvEscape(item.data.title ? item.data.title : ''));
           str += pd.helpers.csvCell(pd.helpers.strToBase64(item.data.body ? item.data.body : (item.data.selftext ? item.data.selftext : '')));
-          str += pd.helpers.csvCell(item.data.permalink ?
-              'https://reddit.com'+item.data.permalink :
-              'https://reddit.com/r/'+item.data.subreddit+'/comments/'+(item.data.link_id.replace(/^t\d_/,''))+'/x/'+item.data.id+'?context=3'
-            );
+          str += pd.helpers.csvCell(pd.helpers.getOrCreatePermalink(item));
           str+= pd.helpers.csvCell(item.data.score);
           str+= pd.helpers.csvCell(item.data.created_utc);
           str+= pd.helpers.csvCell((item.pdEdited ? 'edited ' : '') + (item.pdDeleted ? 'deleted ' : ''));
@@ -510,7 +514,7 @@ var pd = {
           method: 'post',
           data: {
             thing_id: item.data.name,
-            text: pd.task.config.editText,
+            text: pd.task.config.editText.replace("%encoded_permalink%", encodeURIComponent(pd.helpers.getOrCreatePermalink(item))),
             id: '#form-'+item.data.name,
             r: item.data.subreddit,
             uh: pd.config.uh,
